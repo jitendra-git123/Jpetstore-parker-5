@@ -1,12 +1,12 @@
 node {
-        def majorVersion="2.0.${BUILD_NUMBER}"
+        def majorVersion="3.0.${BUILD_NUMBER}"
 	currentBuild.displayName = majorVersion
 
 	//currentBuild.displayName = "2.0.${BUILD_NUMBER}"
 	def GIT_COMMIT
   stage ('cloning the repository'){
 	  
-      def scm = git 'https://github.com/jitendra-git123/Jpetstore-parker-1'
+      def scm = git 'https://github.com/jitendra-git123/Jpetstore-parker-5'
 	  GIT_COMMIT = sh(returnStdout: true, script: "git rev-parse HEAD").trim()
 	  echo "COMMITID ${GIT_COMMIT}"
 	  //echo "BBBB ${scm}"
@@ -33,22 +33,22 @@ node {
   }
 
 	echo("************************** Test Result Upload Started to Velocity****************************")
-                        try{
-                        step([$class: 'UploadJUnitTestResult',
-                            properties: [
-                        // Need to change the path of the test result xml result required.               
-                                filePath: "target/surefire-reports/TEST-org.mybatis.jpetstore.service.OrderServiceTest.xml",
-                                tenant_id: "5ade13625558f2c6688d15ce",
-                                appName: "JPetStore-velocity",
-                                //appExtId: "4b006cdb-0e50-43f2-ac87-a7586a65389e",
-				appExtId: "acdfae67-616f-43e5-8872-2cfa3aa583de",
-				//appId: "acdfae67-616f-43e5-8872-2cfa3aa583de",    
-                                name: "Executed in JUnit - 2.0.${BUILD_NUMBER}",
-                                testSetName: "Junit Test Run from Jenkins"]
+    //                    try{
+      //                  step([$class: 'UploadJUnitTestResult',
+        //                    properties: [
+          //              // Need to change the path of the test result xml result required.               
+            //                    filePath: "target/surefire-reports/TEST-org.mybatis.jpetstore.service.OrderServiceTest.xml",
+              //                  tenant_id: "5ade13625558f2c6688d15ce",
+                //                appName: "JPetStore-velocity",
+                  //              //appExtId: "4b006cdb-0e50-43f2-ac87-a7586a65389e",
+			//	appExtId: "acdfae67-616f-43e5-8872-2cfa3aa583de",
+			//	//appId: "acdfae67-616f-43e5-8872-2cfa3aa583de",    
+                          //      name: "Executed in JUnit - 2.0.${BUILD_NUMBER}",
+                            //    testSetName: "Junit Test Run from Jenkins"]
                            
-                        ])}catch(e){
-                        throw e
-                        }
+                      //  ])}catch(e){
+                      //  throw e
+                      //  }
                        
             echo("************************** Test Result Uploaded Successful to Velocity****************************")
 	
@@ -58,23 +58,13 @@ node {
 		
 		withSonarQubeEnv('sonar-server'){
 			 //"SONAR_USER_HOME=/opt/bitnami/jenkins/.sonar ${mvnHome}/bin/mvn sonar:sonar"
-			sh  "mvn sonar:sonar -Dsonar.projectName=JpetStore-velocity"
+			sh  "mvn sonar:sonar -Dsonar.projectName=JpetStore-web"
 			//sh "${path}/bin/gradle --info -Dsonar.host.url=http://localhost:9000 sonarqube"
 		}
 	}
 	
 	
-stage ("Appscan"){
-     //  appscan application: '84963f4f-0cf4-4262-9afe-3bd7c0ec3942', credentials: 'Credential for ASOC', failBuild: true, failureConditions: [failure_condition(failureType: 'high', threshold: 20)], name: '84963f4f-0cf4-4262-9afe-3bd7c0ec39421562', scanner: static_analyzer(hasOptions: false, target: 'D:/Installables/Jenkins/workspace/Velocity/AltoroJ/build/libs/'), type: 'Static Analyzer'
-  	build job: '/velocity/Jpetstore/asoc', wait: false, parameters: [
-	//build job: '/asoc', wait: false, parameters: [
-	//string(name: 'COMMITID', value: GIT_COMMIT),
-	string(name: 'COMMITID', value: GIT_COMMIT),
-	string(name: 'parentBuildNumber', value: BUILD_NUMBER)
-	//string(name: 'parentBuildNumber', value: 2.0.${BUILD_NUMBER})
-		
-	]
-}
+
 	
 echo "(*******)"	
   stage('Publish Artificats to UCD'){
@@ -106,33 +96,33 @@ echo "(*******)"
 	//	readFile('env.txt').split("\r?\n").each {
 	//	println it
 	//	}
-	echo "(*******)"
-	  echo "Demo1234 ${JPetStorevelocityComponent_VersionId}"
-	  def newComponentVersionId = "${JPetStorevelocityComponent_VersionId}"
-	  echo "git commit ${GIT_COMMIT}"
-	  //step($class: 'UploadBuild', tenantId: "5ade13625558f2c6688d15ce", revision: "${GIT_COMMIT}", appName: "Altoro", requestor: "admin", id: "${newComponentVersionId}" )
- step($class: 'UploadBuild', 
-       tenantId: "5ade13625558f2c6688d15ce", 
-       revision: "${GIT_COMMIT}", 
-       appName: "JPetStore-velocity", 
-       requestor: "admin", 
-       id: "${newComponentVersionId}", 
-       versionName: "2.0.${BUILD_NUMBER}"
-      )
+//	echo "(*******)"
+//	  echo "Demo1234 ${JPetStorevelocityComponent_VersionId}"
+//	  def newComponentVersionId = "${JPetStorevelocityComponent_VersionId}"
+//	  echo "git commit ${GIT_COMMIT}"
+//	  //step($class: 'UploadBuild', tenantId: "5ade13625558f2c6688d15ce", revision: "${GIT_COMMIT}", appName: "Altoro", requestor: "admin", id: "${newComponentVersionId}" )
+// step($class: 'UploadBuild', 
+  //     tenantId: "5ade13625558f2c6688d15ce", 
+    //   revision: "${GIT_COMMIT}", 
+      // appName: "JPetStore-velocity", 
+    //   requestor: "admin", 
+   //    id: "${newComponentVersionId}", 
+   //    versionName: "2.0.${BUILD_NUMBER}"
+   //   )
      
-	//echo "Demo123 ${newComponentVersionId}"
-	//sleep 25
-	  step([$class: 'UCDeployPublisher',
-		deploy: [ createSnapshot: [deployWithSnapshot: true, 
-			 snapshotName: "2.0.${BUILD_NUMBER}"],
-			 deployApp: 'JPetStore-velocity', 
-			 deployDesc: 'Requested from Jenkins', 
-			 deployEnv: 'JPetStore-velocity_Dev', 
-			 deployOnlyChanged: false, 
-			 deployProc: 'Deploy-JPetStore-velocity', 
-			 deployReqProps: '', 
-			 deployVersions: "JPetStorevelocityComponent:2.0.${BUILD_NUMBER}"], 
-		siteName: 'UCD_Local'])
+//	//echo "Demo123 ${newComponentVersionId}"
+//	//sleep 25
+//	  step([$class: 'UCDeployPublisher',
+//		deploy: [ createSnapshot: [deployWithSnapshot: true, 
+//			 snapshotName: "2.0.${BUILD_NUMBER}"],
+//			 deployApp: 'JPetStore-velocity', 
+//			 deployDesc: 'Requested from Jenkins', 
+//			 deployEnv: 'JPetStore-velocity_Dev', 
+//			 deployOnlyChanged: false, 
+//			 deployProc: 'Deploy-JPetStore-velocity', 
+//			 deployReqProps: '', 
+//			 deployVersions: "JPetStorevelocityComponent:2.0.${BUILD_NUMBER}"], 
+//		siteName: 'UCD_Local'])
 
  }
 	
