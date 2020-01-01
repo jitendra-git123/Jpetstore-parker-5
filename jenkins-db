@@ -37,7 +37,7 @@ echo "(*******)"
 	                pushVersion: '4.0.${BUILD_NUMBER}',
 	                //baseDir: '/var/jenkins_home/workspace/JPetStore/target',
 			 baseDir: 'D:/Installables/Jenkins/workspace/UOB/db/',
-	                fileIncludePatterns: '*.sql',
+	                fileIncludePatterns: '**/*.sql',
 	                fileExcludePatterns: '',
 	               // pushProperties: 'jenkins.server=Jenkins-app\njenkins.reviewed=false',
 	                pushDescription: 'Pushed from Jenkins'
