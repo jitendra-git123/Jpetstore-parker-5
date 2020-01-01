@@ -1,8 +1,8 @@
 node {
-        def majorVersion="3.0.${BUILD_NUMBER}"
+        def majorVersion="4.0.${BUILD_NUMBER}"
 	currentBuild.displayName = majorVersion
 
-	//currentBuild.displayName = "3.0.${BUILD_NUMBER}"
+	//currentBuild.displayName = "4.0.${BUILD_NUMBER}"
 	def GIT_COMMIT
   stage ('cloning the repository'){
 	  
@@ -34,7 +34,7 @@ echo "(*******)"
 	            ],
 	            delivery: [
 	                $class: 'com.urbancode.jenkins.plugins.ucdeploy.DeliveryHelper$Push',
-	                pushVersion: '3.0.${BUILD_NUMBER}',
+	                pushVersion: '4.0.${BUILD_NUMBER}',
 	                //baseDir: '/var/jenkins_home/workspace/JPetStore/target',
 			 baseDir: 'D:/Installables/Jenkins/workspace/UOB/db/',
 	                fileIncludePatterns: '*.sql',
